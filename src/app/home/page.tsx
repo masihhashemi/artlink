@@ -42,7 +42,7 @@ export default async function HomePage({
         <select
           name="type"
           defaultValue={params.type || "all"}
-          className="input max-w-[180px]"
+          className="input select-input appearance-none max-w-[180px]"
         >
           <option value="all">All posts</option>
           <option value="looking_for">Looking for</option>
@@ -52,7 +52,7 @@ export default async function HomePage({
         <select
           name="skill"
           defaultValue={params.skill || ""}
-          className="input max-w-[220px]"
+          className="input select-input appearance-none max-w-[220px]"
         >
           <option value="">All skills</option>
           {skills.map((skill) => (
