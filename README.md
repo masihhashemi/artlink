@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Art Link
 
-## Getting Started
+Social network for art alumni — profiles, skills, looking-for / offering posts, skill-based recommendations, connections, messaging, and a feed with likes & comments.
 
-First, run the development server:
+## Quick start (demo mode)
+
+Demo mode runs fully locally with a file-backed store (no Supabase account required).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Demo accounts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Email | Password |
+| --- | --- |
+| maya@artlink.demo | demo1234 |
+| jordan@artlink.demo | demo1234 |
+| sam@artlink.demo | demo1234 |
+| aisha@artlink.demo | demo1234 |
 
-## Learn More
+Seed data lives in `.data/store.json` (created on first run). Delete that file to reset.
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Profiles** — picture, description, education/university, skills, experiences, portfolio gallery
+- **Posts** — looking for, offering, or updates (with skill tags + feed filters)
+- **Notifications** — skill-match alerts when someone needs what you have
+- **Discover** — recommendation scores from shared / complementary skills + university
+- **Network** — connect requests, accept/decline
+- **Messages** — DMs between accepted connections
+- **Feed social** — likes and comments
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack
 
-## Deploy on Vercel
+- Next.js (App Router) + TypeScript + Tailwind CSS
+- Local demo store by default (`NEXT_PUBLIC_DEMO_MODE=true`)
+- Supabase SQL schema + seed ready for production migration (`supabase/`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Supabase (optional / later)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Create a Supabase project
+2. Run `supabase/migrations/001_initial.sql` then `supabase/seed.sql`
+3. Copy `.env.example` → `.env.local` and set:
+
+```env
+NEXT_PUBLIC_DEMO_MODE=false
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+Client helpers are in `src/lib/supabase/`. The prototype currently serves traffic through the demo store so you can pitch and test immediately; wire the same schema to Supabase when you are ready to host.
+
+## Scripts
+
+- `npm run dev` — local development
+- `npm run build` — production build
+- `npm run start` — run production server
+- `npm run lint` — ESLint
