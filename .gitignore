@@ -37,6 +37,16 @@ yarn-error.log*
 # local demo data store
 .data/
 
+# expo / mobile
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+
 # vercel
 .vercel
 
