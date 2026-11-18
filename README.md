@@ -2,6 +2,8 @@
 
 Social network for art alumni — profiles, skills, looking-for / offering posts, skill-based recommendations, connections, messaging, and a feed with likes & comments.
 
+**Live demo:** [https://artlink-tau.vercel.app](https://artlink-tau.vercel.app) — try `maya@artlink.demo` / `demo1234`
+
 **Monorepo layout**
 
 - Website + REST API — Next.js at the repo root

@@ -10,6 +10,10 @@ import type { Store } from "@/lib/types";
 const DATA_DIR = path.join(process.cwd(), ".data");
 const STORE_PATH = path.join(DATA_DIR, "store.json");
 
+/** Vercel (and similar) have no durable local disk — keep seed data in memory. */
+const useMemoryStore = Boolean(process.env.VERCEL);
+
+let memoryStore: Store | null = null;
 let writeQueue: Promise<void> = Promise.resolve();
 
 function demoProfilesNeedRefresh(store: Store): boolean {
@@ -33,7 +37,16 @@ function migrateStore(store: Store): Store {
   return store;
 }
 
-async function ensureStore(): Promise<Store> {
+function ensureMemoryStore(): Store {
+  if (!memoryStore) {
+    memoryStore = migrateStore(createDemoSeedStore());
+  } else {
+    memoryStore = migrateStore(memoryStore);
+  }
+  return memoryStore;
+}
+
+async function ensureFileStore(): Promise<Store> {
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
     const raw = await fs.readFile(STORE_PATH, "utf8");
@@ -51,6 +64,11 @@ async function ensureStore(): Promise<Store> {
   }
 }
 
+async function ensureStore(): Promise<Store> {
+  if (useMemoryStore) return ensureMemoryStore();
+  return ensureFileStore();
+}
+
 export async function readStore(): Promise<Store> {
   return ensureStore();
 }
@@ -61,7 +79,11 @@ export async function updateStore(
   writeQueue = writeQueue.then(async () => {
     const store = await ensureStore();
     await mutator(store);
-    await fs.writeFile(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
+    if (useMemoryStore) {
+      memoryStore = store;
+    } else {
+      await fs.writeFile(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
+    }
   });
   await writeQueue;
   return ensureStore();

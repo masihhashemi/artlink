@@ -1,0 +1,17 @@
+mobile
+mobile/**
+.data
+.data/**
+.next
+.next/**
+node_modules
+**/node_modules
+.git
+**/.git
+**/.expo
+**/ios
+**/android
+*.tsbuildinfo
+agent-transcripts
+.cursor
+**/.claude
